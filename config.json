@@ -1,0 +1,10 @@
+{
+  "crtPath": "server.crt",
+  "keyPath": "private.key",
+  "acceptedTokens": [
+    "token1",
+    "token2",
+    "token3"
+  ]
+}
+

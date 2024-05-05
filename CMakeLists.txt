@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+project(PlantMonServer)
+find_package(Crow REQUIRED)
+set(SOURCE_FILES src/PlantMonServer.cpp)
+add_executable(PlantMonServer ${SOURCE_FILES})
+target_link_libraries(PlantMonServer PRIVATE Crow::Crow)

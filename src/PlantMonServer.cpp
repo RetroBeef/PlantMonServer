@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <iomanip>
+#include <chrono>
 #include <string>
 #include "crow.h"
 
@@ -12,6 +14,23 @@ struct Config {
     std::string keyPath;
     std::vector<std::string> acceptedTokens;
 };
+
+std::string getTime() {
+    // Get the current time point
+    auto now = std::chrono::system_clock::now();
+
+    // Convert it to a time_t, which represents the number of seconds since the epoch
+    std::time_t time_now = std::chrono::system_clock::to_time_t(now);
+
+    // Convert time_t to a tm struct
+    std::tm tm_now = *std::localtime(&time_now);
+
+    // Format the timestamp
+    std::ostringstream oss;
+    oss << std::put_time(&tm_now, "%Y-%m-%dT%H:%M:%S");
+    
+    return oss.str();
+}
 
 std::string loadfile(const std::string& filename) {
     std::ifstream file(filename);
@@ -114,8 +133,10 @@ int main(int argc, char* argv[]) {
         if (!json) {
             return response(400, "Invalid JSON format");
         }
+        json::wvalue itemJson(json);
+        itemJson["time"] = getTime();
         // Append sensor data to the text file
-        std::string item = json::wvalue(json).dump();
+        std::string item = itemJson.dump();
         appendSensorDataToFile(item);
         std::cout << "appending " << item << std::endl;
         
